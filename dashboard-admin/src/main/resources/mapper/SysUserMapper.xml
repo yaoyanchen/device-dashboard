@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.easy.dashboard.mapper.SysUserMapper">
+  <resultMap id="BaseResultMap" type="com.easy.dashboard.domain.SysUser">
+    <!--@mbg.generated-->
+    <!--@Table sys_user-->
+    <id column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
+    <result column="updated_by" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="is_deleted" jdbcType="BIT" property="isDeleted" />
+    <result column="dept_id" jdbcType="BIGINT" property="deptId" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="nick_name" jdbcType="VARCHAR" property="nickName" />
+    <result column="gender" jdbcType="VARCHAR" property="gender" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="avatar_name" jdbcType="VARCHAR" property="avatarName" />
+    <result column="avatar_path" jdbcType="VARCHAR" property="avatarPath" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="is_admin" jdbcType="BIT" property="isAdmin" />
+    <result column="enabled" jdbcType="BIGINT" property="enabled" />
+    <result column="pwd_reset_time" jdbcType="TIMESTAMP" property="pwdResetTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    user_id, created_by, updated_by, create_time, update_time, is_deleted, dept_id, username, 
+    nick_name, gender, phone, email, avatar_name, avatar_path, `password`, is_admin, 
+    enabled, pwd_reset_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from sys_user
+    where user_id = #{userId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    <!--@mbg.generated-->
+    delete from sys_user
+    where user_id = #{userId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" keyColumn="user_id" keyProperty="userId" parameterType="com.easy.dashboard.domain.SysUser" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into sys_user (created_by, updated_by, create_time, 
+      update_time, is_deleted, dept_id, 
+      username, nick_name, gender, 
+      phone, email, avatar_name, 
+      avatar_path, `password`, is_admin, 
+      enabled, pwd_reset_time)
+    values (#{createdBy,jdbcType=VARCHAR}, #{updatedBy,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{isDeleted,jdbcType=BIT}, #{deptId,jdbcType=BIGINT}, 
+      #{username,jdbcType=VARCHAR}, #{nickName,jdbcType=VARCHAR}, #{gender,jdbcType=VARCHAR}, 
+      #{phone,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{avatarName,jdbcType=VARCHAR}, 
+      #{avatarPath,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{isAdmin,jdbcType=BIT}, 
+      #{enabled,jdbcType=BIGINT}, #{pwdResetTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" keyColumn="user_id" keyProperty="userId" parameterType="com.easy.dashboard.domain.SysUser" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into sys_user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="createdBy != null">
+        created_by,
+      </if>
+      <if test="updatedBy != null">
+        updated_by,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="isDeleted != null">
+        is_deleted,
+      </if>
+      <if test="deptId != null">
+        dept_id,
+      </if>
+      <if test="username != null">
+        username,
+      </if>
+      <if test="nickName != null">
+        nick_name,
+      </if>
+      <if test="gender != null">
+        gender,
+      </if>
+      <if test="phone != null">
+        phone,
+      </if>
+      <if test="email != null">
+        email,
+      </if>
+      <if test="avatarName != null">
+        avatar_name,
+      </if>
+      <if test="avatarPath != null">
+        avatar_path,
+      </if>
+      <if test="password != null">
+        `password`,
+      </if>
+      <if test="isAdmin != null">
+        is_admin,
+      </if>
+      <if test="enabled != null">
+        enabled,
+      </if>
+      <if test="pwdResetTime != null">
+        pwd_reset_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="createdBy != null">
+        #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedBy != null">
+        #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDeleted != null">
+        #{isDeleted,jdbcType=BIT},
+      </if>
+      <if test="deptId != null">
+        #{deptId,jdbcType=BIGINT},
+      </if>
+      <if test="username != null">
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="nickName != null">
+        #{nickName,jdbcType=VARCHAR},
+      </if>
+      <if test="gender != null">
+        #{gender,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="avatarName != null">
+        #{avatarName,jdbcType=VARCHAR},
+      </if>
+      <if test="avatarPath != null">
+        #{avatarPath,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="isAdmin != null">
+        #{isAdmin,jdbcType=BIT},
+      </if>
+      <if test="enabled != null">
+        #{enabled,jdbcType=BIGINT},
+      </if>
+      <if test="pwdResetTime != null">
+        #{pwdResetTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.easy.dashboard.domain.SysUser">
+    <!--@mbg.generated-->
+    update sys_user
+    <set>
+      <if test="createdBy != null">
+        created_by = #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedBy != null">
+        updated_by = #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDeleted != null">
+        is_deleted = #{isDeleted,jdbcType=BIT},
+      </if>
+      <if test="deptId != null">
+        dept_id = #{deptId,jdbcType=BIGINT},
+      </if>
+      <if test="username != null">
+        username = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="nickName != null">
+        nick_name = #{nickName,jdbcType=VARCHAR},
+      </if>
+      <if test="gender != null">
+        gender = #{gender,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="avatarName != null">
+        avatar_name = #{avatarName,jdbcType=VARCHAR},
+      </if>
+      <if test="avatarPath != null">
+        avatar_path = #{avatarPath,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        `password` = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="isAdmin != null">
+        is_admin = #{isAdmin,jdbcType=BIT},
+      </if>
+      <if test="enabled != null">
+        enabled = #{enabled,jdbcType=BIGINT},
+      </if>
+      <if test="pwdResetTime != null">
+        pwd_reset_time = #{pwdResetTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where user_id = #{userId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.easy.dashboard.domain.SysUser">
+    <!--@mbg.generated-->
+    update sys_user
+    set created_by = #{createdBy,jdbcType=VARCHAR},
+      updated_by = #{updatedBy,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      is_deleted = #{isDeleted,jdbcType=BIT},
+      dept_id = #{deptId,jdbcType=BIGINT},
+      username = #{username,jdbcType=VARCHAR},
+      nick_name = #{nickName,jdbcType=VARCHAR},
+      gender = #{gender,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      avatar_name = #{avatarName,jdbcType=VARCHAR},
+      avatar_path = #{avatarPath,jdbcType=VARCHAR},
+      `password` = #{password,jdbcType=VARCHAR},
+      is_admin = #{isAdmin,jdbcType=BIT},
+      enabled = #{enabled,jdbcType=BIGINT},
+      pwd_reset_time = #{pwdResetTime,jdbcType=TIMESTAMP}
+    where user_id = #{userId,jdbcType=BIGINT}
+  </update>
+</mapper>

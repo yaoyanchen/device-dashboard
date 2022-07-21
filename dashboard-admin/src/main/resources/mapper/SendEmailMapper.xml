@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.easy.dashboard.mapper.SendEmailMapper">
+  <resultMap id="BaseResultMap" type="com.easy.dashboard.domain.SendEmail">
+    <!--@mbg.generated-->
+    <!--@Table send_email-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="send_to" jdbcType="VARCHAR" property="sendTo" />
+    <result column="send_content" jdbcType="VARCHAR" property="sendContent" />
+    <result column="send_code" jdbcType="VARCHAR" property="sendCode" />
+    <result column="send_time" jdbcType="TIMESTAMP" property="sendTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, send_to, send_content, send_code, send_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from send_email
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from send_email
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert">
+    <!--@mbg.generated-->
+    insert into send_email (send_to, send_content, send_code, 
+      send_time)
+    values (#{sendTo,jdbcType=VARCHAR}, #{sendContent,jdbcType=VARCHAR}, #{sendCode,jdbcType=VARCHAR}, 
+      #{sendTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective">
+    <!--@mbg.generated-->
+    insert into send_email
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="sendTo != null">
+        send_to,
+      </if>
+      <if test="sendContent != null">
+        send_content,
+      </if>
+      <if test="sendCode != null">
+        send_code,
+      </if>
+      <if test="sendTime != null">
+        send_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="sendTo != null">
+        #{sendTo,jdbcType=VARCHAR},
+      </if>
+      <if test="sendContent != null">
+        #{sendContent,jdbcType=VARCHAR},
+      </if>
+      <if test="sendCode != null">
+        #{sendCode,jdbcType=VARCHAR},
+      </if>
+      <if test="sendTime != null">
+        #{sendTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.easy.dashboard.domain.SendEmail">
+    <!--@mbg.generated-->
+    update send_email
+    <set>
+      <if test="sendTo != null">
+        send_to = #{sendTo,jdbcType=VARCHAR},
+      </if>
+      <if test="sendContent != null">
+        send_content = #{sendContent,jdbcType=VARCHAR},
+      </if>
+      <if test="sendCode != null">
+        send_code = #{sendCode,jdbcType=VARCHAR},
+      </if>
+      <if test="sendTime != null">
+        send_time = #{sendTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.easy.dashboard.domain.SendEmail">
+    <!--@mbg.generated-->
+    update send_email
+    set send_to = #{sendTo,jdbcType=VARCHAR},
+      send_content = #{sendContent,jdbcType=VARCHAR},
+      send_code = #{sendCode,jdbcType=VARCHAR},
+      send_time = #{sendTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

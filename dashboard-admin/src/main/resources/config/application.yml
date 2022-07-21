@@ -1,0 +1,27 @@
+server:
+  port: 9003
+  servlet:
+    context-path: /dashboard
+mybatis-plus:
+  global-config:
+    db-config:
+      logic-delete-field: isDeleted
+      logic-delete-value: true
+      logic-not-delete-value: false
+  type-aliases-package: com.easy.dashboard.domain
+  mapper-locations: classpath*:/mapper/**.xml
+sa-token:
+  token-style: UUID
+  token-name: Authorization
+  # token有效期，单位秒  有效期是1小时
+  timeout: 3600
+  # token临时有效期 (指定时间内无操作就视为token过期) 单位: 秒
+  activity-timeout: 1800
+  # 在多人登录同一账号时，是否共用一个token (为true时所有登录共用一个token, 为false时每次登录新建一个token)
+  is-share: false
+rsa:
+  private_key: MIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBAIk9ipjdsyXurdiStcOH7HVWHyiLdZf49gCgtNJySfIUfw4aJnyt55OoCPCLi/+dDcstg27vk6DzhdWRpId4y5p8ruwFofctHNbST1sFSQ0lkdEVe/knWGuN5R0MlwrunzA1LBZiEEUXvHTN7nU1mIWpaBBd9hqHg2M+PPHhZHGDAgMBAAECgYEAgjCJO/6EJeXHsP1rxDM7EwxBvpqdUS9xXqMVJdYZY7Yh2WThQcFPP3lWEaqvgiqgnS9t0V0gNL0PJsxkwcbLjTwQTXK1kuU9EeHapGa4aA4FLskcRMTC3Fjac/qdcMJ1i3+YUy8V957QJ3YtUoI1oTc+dH7CzO0djdD4K5HKy3ECQQDBf5vSvR0S4FEydcrN9MGUL4MTwNHDMmMP7sssM8a157VkQVSxdJ0Cwa/z1cMN158JNBSXrArYKOqmu0j20mEFAkEAtZHzoLfYv58c0NtoM9m/fSLWuQpUjv/S/to5pLDt/xd/V0V71KiCXlNhsgLaQ5bBCRM3MEZOoym0di1zJaAu5wJAXMAEOzG3G/M2OI/J1Is7twJHPFKyuXQPk/WMofV3jH4yrom6RQ12rXmWE7UlOB9g9hJmxIUM9aw3PhCL2vPg2QJAcniv5nXCGx1PZ4XMblQr29LpGQQgR3+WIMKocOJzSc4gpH7UEUCj4KAlCbuuq8oRrY0F0FOjJE8YzSDeZaxVpQJAUoHzwl53kaKTnw6/Mh47VeR8OzMaaeZbWSp/r5Q45LPRkEbXKXstVAbfe0X6OvlzWaQNPKBjCWM6udMCfR0aYA==
+spring:
+  profiles:
+    active: pro
+

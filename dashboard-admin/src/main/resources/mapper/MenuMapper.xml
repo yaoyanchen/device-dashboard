@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.easy.dashboard.mapper.MenuMapper">
+    <resultMap id="menuResultMapper" type="com.easy.dashboard.domain.Menu">
+        <result column="menu_id" property="menuId"/>
+        <result column="type" property="type"/>
+        <result column="component" property="component"/>
+        <result column="name" property="name"/>
+        <result column="path" property="path"/>
+        <result column="hidden" property="hidden" />
+        <association property="meta" javaType="com.easy.dashboard.domain.Meta">
+            <result column="title" property="title" />
+            <result column="icon" property="icon" />
+        </association>
+        <collection property="children" ofType="com.easy.dashboard.domain.Menu">
+            <result column="child_menu_id" property="menuId"/>
+            <result column="chile_type" property="type"/>
+            <result column="chile_component" property="component"/>
+            <result column="chile_name" property="name"/>
+            <result column="chile_path" property="path"/>
+            <result column="chile_hidden" property="hidden" />
+            <association property="meta" javaType="com.easy.dashboard.domain.Meta">
+                <result column="chile_time" property="title" />
+                <result column="chile_icon" property="icon" />
+            </association>
+        </collection>
+    </resultMap>
+    <select id="getRoles" resultType="java.lang.Integer">
+        SELECT role_id FROM sys_users_roles
+        <where>
+            user_id = #{userId,jdbcType=INTEGER}
+        </where>
+    </select>
+
+    <select id="getMenus" resultMap="menuResultMapper">
+        SELECT
+            selectMainMenu.menu_id,
+            selectMainMenu.type,
+            selectMainMenu.component,
+            selectMainMenu.name,
+            selectMainMenu.path,
+            selectMainMenu.hidden,
+            selectMainMenu.title,
+            selectMainMenu.icon,
+            selectMainMenu.menu_sort,
+            chileMene.menu_id as child_menu_id,
+            chileMene.type as chile_type,
+            chileMene.component as chile_component,
+            chileMene.name as chile_name,
+            chileMene.path as chile_path,
+            chileMene.hidden as chile_hidden,
+            chileMene.title as chile_time,
+            chileMene.icon as chile_icon
+            FROM (
+            SELECT
+            mainMenu.menu_id,
+            mainMenu.type,
+            mainMenu.component,
+            mainMenu.name,
+            mainMenu.path,
+            mainMenu.title,
+            mainMenu.icon,
+            mainMenu.hidden,
+            mainMenu.menu_sort
+            FROM sys_menu as mainMenu
+            <where>
+                mainMenu.pid IS NULL AND mainMenu.is_delete = 0 AND
+                mainMenu.menu_id IN
+                (
+                (SELECT objToObj.menu_id FROM sys_roles_menus as objToObj WHERE objToObj.role_id IN
+                <foreach collection="collection" item="item" open="(" separator="," close=")">
+                    #{item,jdbcType=
+                INTEGER}
+                </foreach>
+                    )
+                )
+            </where>
+        ) as selectMainMenu
+        LEFT JOIN sys_menu as chileMene ON chileMene.pid = selectMainMenu.menu_id
+        ORDER BY selectMainMenu.menu_sort,chileMene.menu_sort
+    </select>
+</mapper>
