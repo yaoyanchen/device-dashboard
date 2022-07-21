@@ -26,13 +26,13 @@ spring:
         server-addr: http://81.68.206.166
         username: nacos
         password: hnnyyz1519yyc
-        ip: 47.102.126.39
+        ip: 81.68.102.166
   application:
     name: dashboard
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
-    driverClassName: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://47.102.126.39:3306/easydashboard?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+    driverClassName: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+    url: jdbc:log4jdbc:mysql://47.102.126.39:3306/easydashboard?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
     password: easydashboard
     username: easydashboard
     druid:

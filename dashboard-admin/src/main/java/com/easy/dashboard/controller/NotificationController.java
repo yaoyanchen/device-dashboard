@@ -30,7 +30,7 @@ public class NotificationController {
      * @param messageBean 记录后台管理页面传过来的内容
      * @return
      */
-    @RequestMapping(value = "/api/notification/sendAll",method = RequestMethod.POST  , produces = "application/json;charset=UTF-8")
+    @PostMapping(value = "/api/notification/sendAll", produces = "application/json;charset=UTF-8")
     public String sendAll(@RequestBody MessageBean messageBean){
         if (messageBean != null){
             String backInfo = JSON.toJSONString(messageBean);
@@ -85,6 +85,7 @@ public class NotificationController {
     public ResultObject kickout(@PathVariable("userName") String userName){
         return WebSocketServer.kickout(userName);
     }
+
 
     @GetMapping("/api/getMsg")
     public ResultObject getMsg() {
