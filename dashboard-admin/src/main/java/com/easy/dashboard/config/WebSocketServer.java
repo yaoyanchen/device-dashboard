@@ -55,7 +55,7 @@ public class WebSocketServer {
             throw new BadRequestException("用户已接入,请勿重复接入");
         }
         sWebSocketServers.add(this); // 将回话保存
-        System.out.println(userName + "接入连接");
+        System.out.println(userName + "上线啦");
         //log.info("-->onOpen new connect vmcNo is " + userName);
         this.userName = userName;
     }
@@ -63,7 +63,7 @@ public class WebSocketServer {
     @OnClose
     public void onClose(@PathParam("userName") String userName) {
         sWebSocketServers.remove(this);
-        log.info(userName + "关闭连接");
+        log.info(userName + "下线了");
     }
 
     @OnMessage
