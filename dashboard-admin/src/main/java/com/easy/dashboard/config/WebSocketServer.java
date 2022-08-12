@@ -29,6 +29,7 @@ public class WebSocketServer {
     private static final CopyOnWriteArrayList<WebSocketServer> sWebSocketServers = new CopyOnWriteArrayList<>();
     private Session mSession;
     private String userName;
+    private static int onlineUserCount = 0;
 
     public static ResultObject kickout(String userName) {
         for (WebSocketServer server : sWebSocketServers) {
@@ -58,12 +59,14 @@ public class WebSocketServer {
         System.out.println(userName + "上线啦");
         //log.info("-->onOpen new connect vmcNo is " + userName);
         this.userName = userName;
+        addOnlineUser();
     }
 
     @OnClose
     public void onClose(@PathParam("userName") String userName) {
         sWebSocketServers.remove(this);
         log.info(userName + "下线了");
+        removeOnlineUser();
     }
 
     @OnMessage
@@ -126,6 +129,10 @@ public class WebSocketServer {
         return success ? message : JSON.toJSONString(new SendMsg(500,"发送失败", "该机器不在线",userName));
     }
 
+    public static int getOnlineUserCount() {
+        return onlineUserCount;
+    }
+
     //获取在线用户
     public static Set<String> getOnlineUser(){
         Set<String> list = new HashSet<>();
@@ -133,5 +140,14 @@ public class WebSocketServer {
             list.add(server.userName);
         }
         return list;
+    }
+
+
+    private synchronized void addOnlineUser() {
+        onlineUserCount ++ ;
+    }
+
+    private synchronized void removeOnlineUser() {
+        onlineUserCount -- ;
     }
 }
