@@ -2,3 +2,4 @@
 dashboard-admin/target
 dashboard-common/target
 dashboard-system/target
+*.iml
