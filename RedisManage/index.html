@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Redis管理</title>
+    <link rel="stylesheet" href="./lib/layui/layui/css/layui.css">
+</head>
+<body>
+<div id="app">
+    <ul>
+        <li v-for="item in db">
+            <a v-on:click="clickDataBase(item.value)">{{ item.name }}</a>
+        </li>
+    </ul>
+    <div>
+        {{ info }}
+    </div>
+</div>
+</body>
+<script src="./lib/layui/layui/layui.js"></script>
+<script src="./js/vue.min.js"></script>
+<script src="./js/axios.min.js"></script>
+<script>
+    var app = new Vue({
+        el: '#app',
+        data: {
+            baseUrl: "http://127.0.0.1:9003/dashboard",
+            db: [
+                {name: '库0', value: 0}
+            ],
+            keyList: [],
+            content: null,
+            info: null
+        },
+        methods: {
+            clickDataBase: function (dataBaseIndex) {
+                var url = this.baseUrl + "/api/redis/manage/getAllKeys/" + dataBaseIndex;
+
+                axios
+                    .get(url)
+                    .then((response) => {
+                        var data = response.data.data;
+                        if (data.list) {
+                            this.keyList = data.list;
+                        }
+                    })
+                    .catch(function (error) { // 请求失败处理
+                        console.log(error);
+                    });
+
+            }
+        },
+    });
+</script>
+</html>
