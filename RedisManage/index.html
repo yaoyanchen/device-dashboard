@@ -3,51 +3,237 @@
 <head>
     <meta charset="UTF-8">
     <title>Redis管理</title>
-    <link rel="stylesheet" href="./lib/layui/layui/css/layui.css">
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <style>
+        html, body, #app {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+    <style>
+        .el-container {
+            height: 100%;
+        }
+
+        .el-header,
+        .el-footer {
+            color: #333;
+            text-align: center;
+            line-height: 60px;
+        }
+
+        .el-aside {
+            color: #333;
+            text-align: center;
+        }
+
+        .el-main {
+            color: #333;
+            text-align: center;
+        }
+
+        .el-menu {
+
+        }
+    </style>
 </head>
 <body>
 <div id="app">
-    <ul>
-        <li v-for="item in db">
-            <a v-on:click="clickDataBase(item.value)">{{ item.name }}</a>
-        </li>
-    </ul>
-    <div>
-        {{ info }}
-    </div>
+    <el-container>
+        <el-aside style="width:180px;">
+            <div style="margin-top: 80px"></div>
+            <div @click="loadList(item.value)"
+                 style="margin-left: 60px;width: 60px;height: 20px;margin-top: 10px;cursor: pointer;border: 1px black solid"
+                 v-for="item in db">
+                <span> {{ item.name }}</span>
+            </div>
+        </el-aside>
+        <el-container>
+            <el-header>Redis管理</el-header>
+            <el-main>
+                <el-form ref="queryForm" :inline="true" v-show="showSearch" label-width="68px">
+                    <el-form-item>
+                        <el-input
+                                v-model="search"
+                                placeholder="关键词搜索"
+                                clearable
+                                size="small"
+                                prefix-icon="el-icon-search"
+                                style="margin-bottom: 20px"
+                        ></el-input>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button @click="searchRedis()" type="primary" icon="el-icon-search" size="mini">搜索
+                        </el-button>
+                        <el-button @click="resetSearch()" icon="el-icon-refresh" size="mini">重置</el-button>
+                    </el-form-item>
+                </el-form>
+                <el-table
+                        :data="keyList"
+                        border
+                        style="width: 100%">
+                    <el-table-column
+                            prop="redisKey"
+                            label="KEY"
+                            width="180">
+                    </el-table-column>
+                    <el-table-column
+                            prop="redisType"
+                            label="类型"
+                            width="180">
+                    </el-table-column>
+                    <el-table-column
+                            prop="value"
+                            label="值">
+                    </el-table-column>
+                    <el-table-column
+                            prop="expireTime"
+                            label="过期时间">
+                    </el-table-column>
+                    <el-table-column
+                            fixed="right"
+                            label="操作"
+                            width="100">
+                        <template slot-scope="scope">
+                            <el-button @click="editRedis(scope.row)" type="text" size="small">编辑</el-button>
+                            <el-button @click="deleteRedis(scope.row.redisKey)" type="text" size="small">删除
+                            </el-button>
+                        </template>
+                    </el-table-column>
+                </el-table>
+                <div style="text-align: center;margin-top: 30px;">
+                    <el-pagination
+                            background
+                            layout="prev, pager, next"
+                            :total="total">
+                    </el-pagination>
+                </div>
+            </el-main>
+        </el-container>
+    </el-container>
+
+
+    <el-dialog
+            title="编辑"
+            :visible.sync="showPage"
+            width="30%"
+            :before-close="handleClose">
+        <span>这是一段信息</span>
+        <span slot="footer" class="dialog-footer">
+    <el-button size="small" @click="showPage = false" >取 消</el-button>
+    <el-button type="primary" size="small" @click="showPage = false">保 存</el-button>
+  </span>
+    </el-dialog>
+
 </div>
 </body>
-<script src="./lib/layui/layui/layui.js"></script>
 <script src="./js/vue.min.js"></script>
 <script src="./js/axios.min.js"></script>
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
 <script>
     var app = new Vue({
         el: '#app',
         data: {
             baseUrl: "http://127.0.0.1:9003/dashboard",
             db: [
-                {name: '库0', value: 0}
+                {name: 'db1', value: 0},
+                {name: 'db2', value: 1},
+                {name: 'db3', value: 2},
+                {name: 'db4', value: 3},
+                {name: 'db5', value: 4},
+                {name: 'db6', value: 5},
+                {name: 'db7', value: 6},
+                {name: 'db8', value: 7},
+                {name: 'db9', value: 8},
+                {name: 'db10', value: 9},
+                {name: 'db11', value: 10},
+                {name: 'db12', value: 11},
+                {name: 'db13', value: 12},
+                {name: 'db14', value: 13},
+                {name: 'db15', value: 14},
+                {name: 'db16', value: 15},
             ],
             keyList: [],
+            total: 0,
             content: null,
-            info: null
+            database: 0,
+            obj: {},
+            showSearch: true,
+            search: "",
+            showPage: false
+        },
+        mounted() {
+            this.loadList(0);
         },
         methods: {
-            clickDataBase: function (dataBaseIndex) {
+            loadList: function (dataBaseIndex) {
                 var url = this.baseUrl + "/api/redis/manage/getAllKeys/" + dataBaseIndex;
-
+                this.database = dataBaseIndex;
                 axios
                     .get(url)
                     .then((response) => {
                         var data = response.data.data;
-                        if (data.list) {
+                        if (data !== undefined) {
                             this.keyList = data.list;
+                            this.total = data.total;
+                        } else {
+                            this.keyList = [];
+                            this.total = 0;
                         }
                     })
                     .catch(function (error) { // 请求失败处理
                         console.log(error);
                     });
-
+            },
+            deleteRedis(key) {
+                var url = this.baseUrl + "/api/redis/manage/deleteRedisByKey/" + this.database + "/" + key;
+                this.$confirm("确定删除吗？", "提示",
+                    {
+                        confirmButtonText: "确定",
+                        cancelButtonText: "取消",
+                        type: "warning"
+                    }
+                ).then(() => {
+                    axios
+                        .post(url)
+                        .then((response) => {
+                            this.loadList(this.database);
+                        })
+                        .catch(function (error) { // 请求失败处理
+                            console.log(error);
+                        });
+                });
+            },
+            searchRedis() {
+                var key = this.search;
+                var url = this.baseUrl + "/api/redis/manage/searchKeysRedisByKey/" + this.database + "/" + key;
+                axios
+                    .get(url)
+                    .then((response) => {
+                        var data = response.data.data;
+                        if (data !== undefined) {
+                            this.keyList = data.list;
+                            this.total = data.total;
+                        } else {
+                            this.keyList = [];
+                            this.total = 0;
+                        }
+                    })
+                    .catch(function (error) { // 请求失败处理
+                        console.log(error);
+                    });
+            },
+            resetSearch() {
+                this.search = "";
+                this.loadList(this.database);
+            },
+            handleClose() {
+                this.showPage = false;
+            },
+            editRedis(obj) {
+                this.showPage = true;
+                this.obj = { ...obj };
             }
         },
     });

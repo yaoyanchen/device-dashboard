@@ -24,13 +24,7 @@ public class RedisManageController extends BaseController
     public ResultObject getAllKeys(@PathVariable Integer dataBaseIndex, Page page) {
         switchDataBase(dataBaseIndex);
         Set<String> keys = redisTemplate.keys("*");
-        if (keys != null && keys.size() > 0) {
-            List<String> list = new ArrayList<>(keys);
-            return ResultObject.success(PageUtil.page(list, page));
-        }
-        else {
-            return ResultObject.success();
-        }
+        return getResultObject(page, keys);
     }
 
     @GetMapping("/getValueByKey/{dataBaseIndex}/{key}")
@@ -61,9 +55,23 @@ public class RedisManageController extends BaseController
     public ResultObject searchKeysRedisByKey(@PathVariable Integer dataBaseIndex,@PathVariable String key,Page page) {
         switchDataBase(dataBaseIndex);
         Set<String> keys = redisTemplate.keys("*" + key + "*");
+        return getResultObject(page, keys);
+    }
+
+    private ResultObject getResultObject(Page page, Set<String> keys) {
         if (keys != null && keys.size() > 0) {
             List<String> list = new ArrayList<>(keys);
-            return ResultObject.success(PageUtil.page(list, page));
+            List<RedisModel> pageList = new ArrayList<>();
+            list.forEach(x -> {
+                Object o = redisTemplate.opsForValue().get(x);
+                RedisModel model = new RedisModel();
+                model.setRedisKey(x);
+                model.setRedisType(ClassUtil.getClassTypeByObject(o));
+                model.setExpireTime(redisTemplate.getExpire(x));
+                model.setValue(o);
+                pageList.add(model);
+            });
+            return ResultObject.success(PageUtil.page(pageList, page));
         }
         else {
             return ResultObject.success();

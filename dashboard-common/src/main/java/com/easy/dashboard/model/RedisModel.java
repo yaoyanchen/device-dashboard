@@ -7,5 +7,7 @@ import lombok.Setter;
 @Getter
 public class RedisModel {
     private Long expireTime;
-    private String value;
+    private Object value;
+    private String redisType;
+    private String redisKey;
 }
